@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140812015408) do
+ActiveRecord::Schema.define(version: 20140812023012) do
 
   create_table "locations", force: true do |t|
     t.string   "name"
@@ -20,8 +20,6 @@ ActiveRecord::Schema.define(version: 20140812015408) do
   end
 
   create_table "vehicle_observations", force: true do |t|
-    t.string   "name"
-    t.string   "vin"
     t.string   "address"
     t.string   "fuel"
     t.string   "interior"
@@ -31,8 +29,19 @@ ActiveRecord::Schema.define(version: 20140812015408) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "location_id"
+    t.integer  "vehicle_id"
   end
 
   add_index "vehicle_observations", ["location_id"], name: "index_vehicle_observations_on_location_id"
+  add_index "vehicle_observations", ["vehicle_id"], name: "index_vehicle_observations_on_vehicle_id"
+
+  create_table "vehicles", id: false, force: true do |t|
+    t.string   "id",            null: false
+    t.string   "license_plate"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "vehicles", ["id"], name: "index_vehicles_on_id", unique: true
 
 end
