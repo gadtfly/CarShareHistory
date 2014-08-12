@@ -7,6 +7,8 @@ class CreateVehicleObservations < ActiveRecord::Migration
       t.string :exterior
       t.float :lat
       t.float :long
+      t.belongs_to :location, index: true
+      t.belongs_to :vehicle, index: true
       t.timestamps
     end
   end
