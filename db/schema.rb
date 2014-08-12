@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140812023012) do
+ActiveRecord::Schema.define(version: 20140812024755) do
 
   create_table "locations", force: true do |t|
     t.string   "name"
@@ -19,21 +19,26 @@ ActiveRecord::Schema.define(version: 20140812023012) do
     t.datetime "updated_at"
   end
 
-  create_table "vehicle_observations", force: true do |t|
-    t.string   "address"
-    t.string   "fuel"
-    t.string   "interior"
-    t.string   "exterior"
-    t.float    "lat"
-    t.float    "long"
+  create_table "observations", force: true do |t|
+    t.integer  "location_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "location_id"
-    t.integer  "vehicle_id"
   end
 
-  add_index "vehicle_observations", ["location_id"], name: "index_vehicle_observations_on_location_id"
-  add_index "vehicle_observations", ["vehicle_id"], name: "index_vehicle_observations_on_vehicle_id"
+  add_index "observations", ["location_id"], name: "index_observations_on_location_id"
+
+  create_table "vehicle_observations", force: true do |t|
+    t.string  "address"
+    t.string  "fuel"
+    t.string  "interior"
+    t.string  "exterior"
+    t.float   "lat"
+    t.float   "long"
+    t.integer "observation_id"
+    t.string  "vehicle_id"
+  end
+
+  add_index "vehicle_observations", ["observation_id"], name: "index_vehicle_observations_on_observation_id"
 
   create_table "vehicles", id: false, force: true do |t|
     t.string   "id",            null: false

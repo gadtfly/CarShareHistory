@@ -1,5 +1,5 @@
 class Location < ActiveRecord::Base
-  has_many :vehicle_observations
+  has_many :observations
 
   include HTTParty
   base_uri 'http://www.car2go.com/api/v2.0'
@@ -11,6 +11,13 @@ class Location < ActiveRecord::Base
   end
 
   def observe!
-    VehicleObservation.observe!(self)
+    observation = observations.create
+    self.class.get('/vehicles', query: {loc: name, format: 'json'})['placemarks'].each do |placemark|
+      vehicle     = Vehicle.find_or_create_by(id: placemark.delete('vin'), license_plate: placemark.delete('name'))
+      vehicle_observation = VehicleObservation.new(placemark)
+      vehicle_observation.observation = observation
+      vehicle_observation.vehicle     = vehicle
+      vehicle_observation.save
+    end
   end
 end
