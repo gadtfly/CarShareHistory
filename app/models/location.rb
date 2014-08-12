@@ -1,5 +1,7 @@
 class Location < ActiveRecord::Base
   has_many :observations
+  has_many :vehicle_observations, through: :observations
+  has_many :vehicles, through: :vehicle_observations
 
   include HTTParty
   base_uri 'http://www.car2go.com/api/v2.0'
