@@ -35,8 +35,6 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'httparty'
-
 group :development do
   gem 'sqlite3'
 end
@@ -46,3 +44,6 @@ group :production do
   gem 'rails_12factor'
   gem 'rb-readline'
 end
+
+gem 'httparty'
+gem 'whenever'

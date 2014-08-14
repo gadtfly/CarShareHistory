@@ -3,10 +3,14 @@ class Location < ActiveRecord::Base
   has_many :vehicle_observations, through: :observations
   has_many :vehicles, through: :vehicle_observations
 
-  def self.refresh_all!
+  def self.refresh!
     Car2Go.locations.each do |hash|
       find_or_create_by(id: hash['locationId'], name: hash['locationName'])
     end
+  end
+
+  def self.observe!
+    all.each(&:observe!)
   end
 
   def observe!
