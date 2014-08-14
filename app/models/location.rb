@@ -3,23 +3,17 @@ class Location < ActiveRecord::Base
   has_many :vehicle_observations, through: :observations
   has_many :vehicles, through: :vehicle_observations
 
-  include HTTParty
-  base_uri 'http://www.car2go.com/api/v2.0'
-
   def self.refresh_all!
-    get('/locations', query: {format: 'json'})['location'].each do |location|
-      find_or_create_by(id: location['locationId'], name: location['locationName'])
+    Car2Go.locations.each do |hash|
+      find_or_create_by(id: hash['locationId'], name: hash['locationName'])
     end
   end
 
   def observe!
     observation = observations.create
-    self.class.get('/vehicles', query: {loc: name, format: 'json'})['placemarks'].each do |placemark|
-      vehicle     = Vehicle.find_or_create_by(id: placemark.delete('vin'), license_plate: placemark.delete('name'))
-      vehicle_observation = VehicleObservation.new(placemark)
-      vehicle_observation.observation = observation
-      vehicle_observation.vehicle     = vehicle
-      vehicle_observation.save
+    Car2Go.vehicles(name).each do |hash|
+      vehicle = Vehicle.find_or_create_by(id: hash.delete('vin'), license_plate: hash.delete('name'))
+      VehicleObservation.create(hash.merge(observation: observation, vehicle: vehicle))
     end
   end
 end
