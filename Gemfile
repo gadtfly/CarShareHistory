@@ -46,4 +46,4 @@ group :production do
 end
 
 gem 'httparty'
-gem 'whenever'
+gem 'rufus-scheduler'

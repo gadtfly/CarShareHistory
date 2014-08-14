@@ -9,10 +9,6 @@ class Location < ActiveRecord::Base
     end
   end
 
-  def self.observe!
-    all.each(&:observe!)
-  end
-
   def observe!
     observation = observations.create
     Car2Go.vehicles(name).each do |hash|
